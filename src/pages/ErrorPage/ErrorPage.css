@@ -1,0 +1,73 @@
+/* Set the error page background */
+.error-page {
+  position: relative;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background-image: url("../../assets/classroom.png"); /* Add your classroom PNG here */
+  background-size: cover;
+  background-position: center;
+}
+
+/* Overlay to ensure the text stands out */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.322); /* Dark overlay for contrast */
+}
+
+/* Blackboard background image */
+.blackboard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../../assets/backg.jpg"); /* Add your blackboard JPG here */
+  background-size: cover;
+  opacity: 0.3; /* Make the blackboard subtle */
+  z-index: -1; /* Place the blackboard behind the content */
+}
+
+/* Center the content */
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+}
+
+/* Heading styles */
+.content h1 {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Paragraph text styles */
+.content p {
+  font-size: 20px;
+}
+
+/* Button styles */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #f8d347; /* Yellow color */
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #d4af37; /* Darker yellow on hover */
+}

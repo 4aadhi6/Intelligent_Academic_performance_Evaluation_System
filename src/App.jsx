@@ -1,45 +1,79 @@
 import React, { useState } from "react";
-import AddStudent from "./components/AddStudent";
-import StudentList from "./components/StudentList";
-import AttendanceLog from "./components/AttendanceLog";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import Performance from "./pages/performance page/Performance";
 
-function App() {
-  const [students, setStudents] = useState([]); // List of students
-  const [attendanceLog, setAttendanceLog] = useState({}); // Attendance by date
+import AttentacePage from "./pages/attendancePage/AttentacePage";
+import NavBar from "./components/NavBar";
+import Login from "./pages/Lohin/Login";
+import HomePage from "./pages/Homepage/HomePage.jsx";
+import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
+import TotalPerformance from "./components/TotalPerformance.jsx";
 
-  // Add a new student (only once)
-  const addStudent = (rollNo, name, section) => {
-    if (students.some((student) => student.rollNo === rollNo)) {
-      alert("Student with this Roll No already exists!");
-      return;
+const App = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [students, setStudents] = useState([]); // State to store student data
+
+  const handleLogin = (username, password) => {
+    if (username === "admin" && password === "admin") {
+      setIsAdmin(true);
+      return true;
     }
-    const newStudent = { rollNo, name, section };
-    setStudents([...students, newStudent]);
+    return false;
   };
 
-  // Mark attendance for a specific student
-  const markAttendance = (rollNo) => {
-    const today = new Date().toISOString().split("T")[0]; // Get today's date
-    if (!attendanceLog[today]) {
-      attendanceLog[today] = {}; // Initialize attendance for today
-    }
+  const handleLogout = () => {
+    setIsAdmin(false);
+  };
 
-    if (!attendanceLog[today][rollNo]) {
-      attendanceLog[today][rollNo] = true; // Mark attendance
-      setAttendanceLog({ ...attendanceLog });
-    } else {
-      alert("Attendance already marked for this student today!");
-    }
+  // Function to add student data (from Performance page)
+  const addStudent = (newStudent) => {
+    setStudents((prevStudents) => [...prevStudents, newStudent]);
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Student Attendance System</h1>
-      <AddStudent addStudent={addStudent} />
-      <StudentList students={students} markAttendance={markAttendance} />
-      <AttendanceLog students={students} attendanceLog={attendanceLog} />
-    </div>
+    <Router>
+      <NavBar isAdmin={isAdmin} logOut={handleLogout} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/attendance"
+          element={
+            isAdmin ? <AttentacePage /> : <Login onLogin={handleLogin} />
+          }
+        />
+        <Route
+          path="/student-performance"
+          element={<Performance addStudent={addStudent} students={students} />} // Pass state to Performance
+        />
+        <Route
+          path="/total-performance"
+          element={<TotalPerformance students={students} />} // Pass state to TotalPerformance
+        />
+        <Route
+          path="/admin"
+          element={
+            isAdmin ? <AttentacePage /> : <Navigate to="/admin-login" replace />
+          }
+        />
+        <Route
+          path="/admin-login"
+          element={
+            isAdmin ? (
+              <Navigate to="/admin" replace />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
